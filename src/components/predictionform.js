@@ -156,7 +156,7 @@ function PredictionForm({ collectionName, isUpdating }) {
                         id="results"
                         name="results"
                         placeholder="Resulst"
-                        value={formData.odd_value}
+                        value={formData.results}
                         onChange={handleChange}
                     />
                 </div>
