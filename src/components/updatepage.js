@@ -14,29 +14,29 @@ function UpdatePage({ predictions, db }) {
   const updatePrediction = async (
     collectionName,
     predictionId,
-    newStatus,
-    newResults,
     newLeague,
     newHomeTeam,
     newAwayTeam,
     newMatchDate,
     newMatchTime,
     newPrediction,
-    newOddvalue
+    newStatus,
+    newOddvalue,
+    newResults,
   ) => {
     try {
       const predictionRef = doc(db, collectionName, predictionId);
 
       await updateDoc(predictionRef, {
-        match_status: newStatus,
-        results: newResults,
         league_name: newLeague,
         home_team: newHomeTeam,
         away_team: newAwayTeam,
         match_date: newMatchDate,
         match_time: newMatchTime,
         game_prediction: newPrediction,
+        match_status: newStatus,
         odd_value: newOddvalue,
+        results: newResults,
       });
 
       // Show a success notification
