@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MyForm from './myform';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,26 +15,30 @@ function UpdatePage({ predictions, db }) {
     collectionName,
     predictionId,
     newStatus,
+    newResults,
     newLeague,
     newHomeTeam,
     newAwayTeam,
     newMatchDate,
     newMatchTime,
-    newPrediction
+    newPrediction,
+    newOddvalue
   ) => {
     try {
       const predictionRef = doc(db, collectionName, predictionId);
 
       await updateDoc(predictionRef, {
         match_status: newStatus,
+        results: newResults,
         league_name: newLeague,
         home_team: newHomeTeam,
         away_team: newAwayTeam,
         match_date: newMatchDate,
         match_time: newMatchTime,
         game_prediction: newPrediction,
+        odd_value: newOddvalue,
       });
-
+       
       // Show a success notification
       toast.success('Prediction updated successfully', {
         position: 'top-right',
@@ -52,6 +56,30 @@ function UpdatePage({ predictions, db }) {
     }
   };
 
+  // Function to delete a prediction
+  const deletePrediction = async (collectionName, predictionId) => {
+    try {
+      const predictionRef = doc(db, collectionName, predictionId);
+
+      await deleteDoc(predictionRef);
+
+      // Show a success notification
+      toast.success('Prediction deleted successfully', {
+        position: 'top-right',
+        autoClose: 3000, // Close the notification after 3 seconds (adjust as needed)
+      });
+
+      // You can update the state here if needed.
+    } catch (error) {
+      console.error('Error deleting prediction:', error);
+      // Show an error notification if the delete fails
+      toast.error('Failed to delete prediction', {
+        position: 'top-right',
+        autoClose: 3000, // Close the notification after 3 seconds (adjust as needed)
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Update Page</h2>
@@ -60,31 +88,39 @@ function UpdatePage({ predictions, db }) {
           <div key={collectionName}>
             <h3>{collectionName.toUpperCase()} Predictions</h3>
             {predictionList.map((prediction) => (
-              <MyForm
-                key={prediction.id}
-                data={prediction}
-                onUpdate={(
-                  newStatus,
-                  newLeague,
-                  newHomeTeam,
-                  newAwayTeam,
-                  newMatchDate,
-                  newMatchTime,
-                  newPrediction
-                ) =>
-                  updatePrediction(
-                    collectionName,
-                    prediction.id,
+              <div key={prediction.id}>
+                <MyForm
+                  data={prediction}
+                  onUpdate={(
                     newStatus,
+                    newResults,
                     newLeague,
                     newHomeTeam,
                     newAwayTeam,
                     newMatchDate,
                     newMatchTime,
-                    newPrediction
-                  )
-                }
-              />
+                    newPrediction,
+                    newOddvalue
+                  ) =>
+                    updatePrediction(
+                      collectionName,
+                      prediction.id,
+                      newStatus,
+                      newResults,
+                      newLeague,
+                      newHomeTeam,
+                      newAwayTeam,
+                      newMatchDate,
+                      newMatchTime,
+                      newPrediction,
+                      newOddvalue
+                    )
+                  }
+                />
+                <button onClick={() => deletePrediction(collectionName, prediction.id)}>
+                  Delete
+                </button>
+              </div>
             ))}
           </div>
         )))}

@@ -8,6 +8,10 @@ function MyForm({ data, onUpdate }) {
   const [newMatchDate, setNewMatchDate] = useState(data.match_date);
   const [newMatchTime, setNewMatchTime] = useState(data.match_time);
   const [newPrediction, setNewPrediction] = useState(data.game_prediction);
+  const [newOddvalue, setNewOddValue] = useState(data.odd_value);
+  const [newResults, setNewResults] = useState(data.results);
+
+
 
   const handleUpdate = () => {
     onUpdate(
@@ -17,7 +21,9 @@ function MyForm({ data, onUpdate }) {
       newAwayTeam,
       newMatchDate,
       newMatchTime,
-      newPrediction
+      newPrediction,
+      newOddvalue,
+      newStatus
     );
   };
 
@@ -74,6 +80,25 @@ function MyForm({ data, onUpdate }) {
           onChange={(e) => setNewPrediction(e.target.value)}
         />
       </div>
+
+      <div>
+        <strong>Odd value:</strong>
+        <input
+          type="text"
+          value={newOddvalue}
+          onChange={(e) => setNewOddValue(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <strong>Results:</strong>
+        <input
+          type="text"
+          value={newResults}
+          onChange={(e) => setNewResults(e.target.value)}
+        />
+      </div>
+
       <div>
         <strong>Status:</strong>
         <select

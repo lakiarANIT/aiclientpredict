@@ -32,6 +32,9 @@ function App() {
     cspredictions: [],
   });
 
+  const [searchDate, setSearchDate] = useState(''); // State for the search date
+  const [searchResults, setSearchResults] = useState(null); // State for search results
+
   useEffect(() => {
     const fetchPredictions = async () => {
       try {
@@ -39,8 +42,7 @@ function App() {
 
         for (const collectionName of collections) {
           const collectionQuery = collection(firestore, collectionName);
-          const pendingQuery = query(collectionQuery, where('match_status', '==', 'pending'));
-          const snapshot = await getDocs(pendingQuery);
+          const snapshot = await getDocs(collectionQuery);
 
           if (!snapshot.empty) {
             const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -55,7 +57,31 @@ function App() {
     };
 
     fetchPredictions();
-  }, []); // Remove 'firestore' from the dependency array as it doesn't need to be there
+  }, []);
+
+  // Function to handle date search
+  const handleDateSearch = () => {
+    const formattedSearchDate = searchDate.trim(); // Remove leading/trailing spaces
+  
+    if (formattedSearchDate) {
+      const filteredResults = {};
+  
+      for (const collectionName of collections) {
+        if (predictions[collectionName]) { // Check if the collection exists
+          const collectionPredictions = predictions[collectionName];
+          const filteredCollection = collectionPredictions.filter((prediction) => {
+            // Assuming 'date' is the property in your prediction data in DD.MM.YYYY format
+            return prediction.date === formattedSearchDate;
+          });
+          filteredResults[collectionName] = filteredCollection;
+        }
+      }
+  
+      setSearchResults(filteredResults);
+    } else {
+      setSearchResults(null); // Clear search results if the search date is empty
+    }
+  }
 
   return (
     <Router>
@@ -63,8 +89,18 @@ function App() {
         <h1>Prediction Form</h1>
 
         <div className="nav-links">
-          <Link to="/update">Update pending</Link>
+          <Link to="/update">Update by Date</Link>
           <Link to="/insert">Add New Games</Link>
+        </div>
+
+        <div>
+          <input
+            type="text"
+            placeholder="DD.MM.YYYY"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+          />
+          <button onClick={handleDateSearch}>Search</button>
         </div>
 
         <Switch>
@@ -79,7 +115,7 @@ function App() {
             </div>
           </Route>
           <Route path="/update">
-          <UpdatePage predictions={predictions} db={db}/>
+            <UpdatePage predictions={searchResults || predictions} db={db} />
           </Route>
         </Switch>
       </div>
