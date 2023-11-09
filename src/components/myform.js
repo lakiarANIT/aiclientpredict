@@ -27,7 +27,7 @@ function MyForm({ data, onUpdate }) {
     );
   };
 
-  const statusOptions = ["pending", "lost", "won"];
+  //const statusOptions = ["pending", "lost", "won"];
 
   return (
     <div>
@@ -100,17 +100,12 @@ function MyForm({ data, onUpdate }) {
       </div>
 
       <div>
-        <strong>Status:</strong>
-        <select
+        <strong>status:</strong>
+        <input
+          type="text"
           value={newStatus}
           onChange={(e) => setNewStatus(e.target.value)}
-        >
-          {statusOptions.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+        />
       </div>
     
       <button onClick={handleUpdate}>Update</button>
