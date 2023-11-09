@@ -38,7 +38,7 @@ function UpdatePage({ predictions, db }) {
         game_prediction: newPrediction,
         odd_value: newOddvalue,
       });
-       
+
       // Show a success notification
       toast.success('Prediction updated successfully', {
         position: 'top-right',
@@ -92,28 +92,28 @@ function UpdatePage({ predictions, db }) {
                 <MyForm
                   data={prediction}
                   onUpdate={(
-                    newStatus,
-                    newResults,
                     newLeague,
                     newHomeTeam,
                     newAwayTeam,
                     newMatchDate,
                     newMatchTime,
                     newPrediction,
-                    newOddvalue
+                    newStatus,
+                    newOddvalue,
+                    newResults,
                   ) =>
                     updatePrediction(
                       collectionName,
                       prediction.id,
-                      newStatus,
-                      newResults,
                       newLeague,
                       newHomeTeam,
                       newAwayTeam,
                       newMatchDate,
                       newMatchTime,
                       newPrediction,
-                      newOddvalue
+                      newStatus,
+                      newOddvalue,
+                      newResults
                     )
                   }
                 />
