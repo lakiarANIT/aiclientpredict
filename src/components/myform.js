@@ -15,15 +15,15 @@ function MyForm({ data, onUpdate }) {
 
   const handleUpdate = () => {
     onUpdate(
-      newResults,
       newLeague,
       newHomeTeam,
       newAwayTeam,
       newMatchDate,
       newMatchTime,
       newPrediction,
+      newStatus,
       newOddvalue,
-      newStatus
+      newResults,
     );
   };
 
@@ -107,7 +107,7 @@ function MyForm({ data, onUpdate }) {
           onChange={(e) => setNewStatus(e.target.value)}
         />
       </div>
-    
+
       <button onClick={handleUpdate}>Update</button>
     </div>
   );
