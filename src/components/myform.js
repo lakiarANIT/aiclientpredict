@@ -15,7 +15,7 @@ function MyForm({ data, onUpdate }) {
 
   const handleUpdate = () => {
     onUpdate(
-      newStatus,
+      newResults,
       newLeague,
       newHomeTeam,
       newAwayTeam,
